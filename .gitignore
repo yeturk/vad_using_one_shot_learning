@@ -1,0 +1,22 @@
+# === IGNORE LARGE DATA FILES ===
+dataset/IPAD_dataset/
+dataset/liste.txt
+
+# === PYTHON CACHE ===
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# === ENVIRONMENTS ===
+.env
+*.env
+venv/
+.anomaly_env/
+.anomaly_env/*
+anomaly_env/
+anomaly_env/*
+
+# === OS & IDE ===
+.DS_Store
+.vscode/

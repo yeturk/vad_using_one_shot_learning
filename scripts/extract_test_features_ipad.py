@@ -43,7 +43,11 @@ preprocess = transforms.Compose([
 # ======================================================
 # 4. Define Directories (TEST PATHS)
 # ======================================================
-frames_dir = "dataset/IPAD_dataset/R01/testing/frames/01"
+# the first test  → R01/testing/frames/01
+# frames_dir = "dataset/IPAD_dataset/R01/testing/frames/01"
+# output_path = "dataset/IPAD_dataset/R01/testing/features"
+# the second test → R01/testing/frames/06
+frames_dir = "dataset/IPAD_dataset/R01/testing/frames/06"
 output_path = "dataset/IPAD_dataset/R01/testing/features"
 os.makedirs(output_path, exist_ok=True)
 
@@ -70,7 +74,8 @@ print(f"✅ Test features extracted: {features.shape}")
 # ======================================================
 # 6. Save Output
 # ======================================================
-output_file = os.path.join(output_path, "01.npy")
+# output_file = os.path.join(output_path, "01.npy")
+output_file = os.path.join(output_path, "06.npy")
 np.save(output_file, features)
 print(f"💾 Saved test features to: {output_file}")
 

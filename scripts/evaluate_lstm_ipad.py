@@ -7,8 +7,13 @@ print("\n ************    0. evaluate_lstm_ipad.py is executed by yet :)    ****
 # ======================================================
 # 1️⃣ Load anomaly scores & ground truth
 # ======================================================
-scores = np.load("/home/yunus/projects/vad_using_one_shot_learning/data/results/anomaly_scores_R01.npy")
-labels = np.load("/home/yunus/projects/vad_using_one_shot_learning/dataset/IPAD_dataset/R01/test_label/001.npy")
+# to test with 01 (color anomaly)
+# scores = np.load("/home/yunus/projects/vad_using_one_shot_learning/data/results/anomaly_scores_R01.npy")
+# labels = np.load("/home/yunus/projects/vad_using_one_shot_learning/dataset/IPAD_dataset/R01/test_label/001.npy")
+
+# to test with 06 (angle anomaly)
+scores = np.load("/home/yunus/projects/vad_using_one_shot_learning/data/results/anomaly_scores_R01_06.npy")
+labels = np.load("/home/yunus/projects/vad_using_one_shot_learning/dataset/IPAD_dataset/R01/test_label/006.npy")
 
 # İkisini hizalamak için sequence offset düzeltmesi
 # (her sequence 10 frame olduğundan son 10 frame labeli düşer)
@@ -61,6 +66,18 @@ prec = precision_score(labels, preds, zero_division=0)
 rec = recall_score(labels, preds, zero_division=0)
 f1 = f1_score(labels, preds, zero_division=0)
 auc = roc_auc_score(labels, scores_norm)
+
+# print(f"\n🎬 Evaluating video: R01 / testing / 01")
+# print(f"   ├─ Scores file: anomaly_scores_R01.npy")
+# print(f"   ├─ Labels file: R01/test_label/001.npy")
+# print(f"   ├─ Threshold method: F1-based optimal search")
+# print(f"   └─ Best threshold selected: {best_thresh:.3f}\n")
+
+print(f"\n🎬 Evaluating video: R01 / testing / 06")
+print(f"   ├─ Scores file: anomaly_scores_R01_06.npy")
+print(f"   ├─ Labels file: R01/test_label/006.npy")
+print(f"   ├─ Threshold method: F1-based optimal search")
+print(f"   └─ Best threshold selected: {best_thresh:.3f}\n")
 
 print(f"""
 📊 Evaluation Metrics:

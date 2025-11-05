@@ -1,0 +1,6 @@
+
+1. extract_features_ipad.py         # featrues of normal videos
+2. extract_test_features_ipad.py    # features of test videos
+3. train_lstm_ipad.py               # lstm model to be used
+4. inference_lstm_ipad.py           # comparing of normal and test videos
+5. evaluate_lstm_ipad.py            # evaluate results and draw graphs

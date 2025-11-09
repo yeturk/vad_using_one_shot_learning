@@ -17,7 +17,8 @@ print(f"✅ Device: {device}")
 # 2️⃣ Load Test Features
 # ======================================================
 # test_path = "/home/yunus/projects/vad_using_one_shot_learning/dataset/IPAD_dataset/R01/testing/features/01.npy"
-test_path = "/home/yunus/projects/vad_using_one_shot_learning/dataset/IPAD_dataset/R01/testing/features/06.npy"
+# test_path = "/home/yunus/projects/vad_using_one_shot_learning/dataset/IPAD_dataset/R01/testing/features/06.npy"
+test_path = "/home/yunus/projects/vad_using_one_shot_learning/dataset/IPAD_dataset/R01/testing/features/09.npy"
 test_features = np.load(test_path)
 print(f"📂 Loaded test features: {test_features.shape}")
 
@@ -83,9 +84,12 @@ print(f"✅ Inference completed! {len(errors)} sequences processed.")
 os.makedirs("results", exist_ok=True)
 # np.save("/home/yunus/projects/vad_using_one_shot_learning/data/results/anomaly_scores_R01.npy", errors)
 # print("💾 Saved anomaly scores to results/anomaly_scores_R01.npy")
+
 np.save("/home/yunus/projects/vad_using_one_shot_learning/data/results/anomaly_scores_R01_06.npy", errors)
 print("💾 Saved anomaly scores to results/anomaly_scores_R01_06.npy")
 
+np.save("/home/yunus/projects/vad_using_one_shot_learning/data/results/anomaly_scores_R01_09.npy", errors)
+print("💾 Saved anomaly scores to results/anomaly_scores_R01_09.npy")
 
 # Plot
 plt.figure(figsize=(12,5))

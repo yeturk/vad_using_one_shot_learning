@@ -7,26 +7,47 @@ print("\n ************    0. evaluate_lstm_ipad.py is executed by yet :)    ****
 # ======================================================
 # 1️⃣ Load anomaly scores & ground truth
 # ======================================================
-# to test with 01 (color anomaly)
-# scores = np.load("/home/yunus/projects/vad_using_one_shot_learning/data/results/anomaly_scores_R01.npy")
-# labels = np.load("/home/yunus/projects/vad_using_one_shot_learning/dataset/IPAD_dataset/R01/test_label/001.npy")
 
-# to test with 06 (angle anomaly)
-# scores = np.load("/home/yunus/projects/vad_using_one_shot_learning/data/results/anomaly_scores_R01_06.npy")
-# labels = np.load("/home/yunus/projects/vad_using_one_shot_learning/dataset/IPAD_dataset/R01/test_label/006.npy")
+scores_path = "/home/yunus/projects/vad_using_one_shot_learning/data/results/anomaly_scores_R01_"
+labels_path = "/home/yunus/projects/vad_using_one_shot_learning/dataset/IPAD_dataset/R01/test_label/0"
+sample_no   = "06"
 
-# to test with 09 (normal sample)
-scores = np.load("/home/yunus/projects/vad_using_one_shot_learning/data/results/anomaly_scores_R01_09.npy")
-labels = np.load("/home/yunus/projects/vad_using_one_shot_learning/dataset/IPAD_dataset/R01/test_label/009.npy")
+scores_path = scores_path + sample_no + ".npy" 
+labels_path = labels_path + sample_no + ".npy"
+
+print(f"Scores: {scores_path}")
+print(f"Labels: {labels_path}")
+
+# to test with sample_no = ""
+scores = np.load(scores_path)
+labels = np.load(labels_path)
+
+print(f"✅ before func Scores shape: {scores.shape}, Labels shape: {labels.shape}")
 
 
-# İkisini hizalamak için sequence offset düzeltmesi
-# (her sequence 10 frame olduğundan son 10 frame labeli düşer)
+def frame_to_sequence_labels(frame_labels, seq_len=10):
+    """Convert frame-level labels to sequence-level labels."""
+    seq_labels = []
+    for i in range(len(frame_labels) - seq_len):
+        window = frame_labels[i : i + seq_len]
+        seq_labels.append(1 if np.any(window == 1) else 0)
+    return np.array(seq_labels)
+
+
+# ✅ Only apply to labels (frame -> sequence)
+labels = frame_to_sequence_labels(labels, seq_len=10)
+
+# ✅ Align both arrays güvenlik amaçlı
 min_len = min(len(scores), len(labels))
-scores  = scores[:min_len]
-labels  = labels[:min_len]
+scores = scores[:min_len]
+labels = labels[:min_len]
 
-print(f"✅ Scores shape: {scores.shape}, Labels shape: {labels.shape}")
+print(f"✅ after func: Scores shape: {scores.shape}, Labels shape: {labels.shape}")
+
+print("Score min: ", np.min(scores))
+print("Score max: ", np.max(scores))
+print("Score mean:", np.mean(scores))
+print("Score std: ", np.std(scores))
 
 # ======================================================
 # 2️⃣ Normalize Scores
@@ -37,21 +58,17 @@ scores_norm = (scores - np.min(scores)) / (np.max(scores) - np.min(scores))
 # 3️⃣ Determine threshold
 # ======================================================
 
-# option-1
+# ✅ option-1: Percentile-based threshold
 # threshold = np.percentile(scores_norm, 90)
 # print(f"⚙️  Threshold (90 percentile): {threshold:.4f}")
 
-# option-2
-# ======================================
-#  Compute Threshold using Z-score rule
-# ======================================
+# ✅ option-2: (Z-score) 
 # mean = np.mean(scores_norm)
 # std = np.std(scores_norm)
-# threshold = mean + 1.5 * std  # or try 1.2 – 1.8 range for tuning
-
+# threshold = mean + 1.5 * std
 # print(f"Mean: {mean:.3f}, Std: {std:.3f}, Threshold (Z-Score): {threshold:.3f}")
 
-# option-3
+# ✅ option-3 (F1-based) 
 from sklearn.metrics import precision_recall_curve, f1_score
 
 precisions, recalls, thresholds = precision_recall_curve(labels, scores_norm)
@@ -59,8 +76,8 @@ f1s = 2 * (precisions * recalls) / (precisions + recalls)
 best_idx = np.argmax(f1s)
 best_thresh = thresholds[best_idx]
 print(f"🔍 Best threshold for max F1: {best_thresh:.3f}")
-
 threshold = best_thresh
+
 preds = (scores_norm > threshold).astype(int)
 
 # ======================================================
@@ -72,23 +89,14 @@ rec  = recall_score(labels, preds, zero_division=0)
 f1   = f1_score(labels, preds, zero_division=0)
 auc  = roc_auc_score(labels, scores_norm)
 
-# print(f"\n🎬 Evaluating video: R01 / testing / 01")
+# print("\nOPTION 1 - Percentile-based threshold:")
+# print("\nOPTION 2 - (Z-score):")
+print("\nOPTION 3 - F1-based optimal search:")
+print(f"🎬 Evaluating video: R01 / testing / {sample_no}")
 # print(f"   ├─ Scores file: anomaly_scores_R01.npy")
 # print(f"   ├─ Labels file: R01/test_label/001.npy")
 # print(f"   ├─ Threshold method: F1-based optimal search")
 # print(f"   └─ Best threshold selected: {best_thresh:.3f}\n")
-
-# print(f"\n🎬 Evaluating video: R01 / testing / 06")
-# print(f"   ├─ Scores file: anomaly_scores_R01_06.npy")
-# print(f"   ├─ Labels file: R01/test_label/006.npy")
-# print(f"   ├─ Threshold method: F1-based optimal search")
-# print(f"   └─ Best threshold selected: {best_thresh:.3f}\n")
-
-print(f"\n🎬 Evaluating video: R01 / testing / 09")
-print(f"   ├─ Scores file: anomaly_scores_R01_09.npy")
-print(f"   ├─ Labels file: R01/test_label/009.npy")
-print(f"   ├─ Threshold method: F1-based optimal search")
-print(f"   └─ Best threshold selected: {best_thresh:.3f}\n")
 
 print(f"""
 📊 Evaluation Metrics:

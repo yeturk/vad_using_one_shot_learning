@@ -16,9 +16,13 @@ print(f"✅ Device: {device}")
 # ======================================================
 # 2️⃣ Load Test Features
 # ======================================================
-# test_path = "/home/yunus/projects/vad_using_one_shot_learning/dataset/IPAD_dataset/R01/testing/features/01.npy"
-# test_path = "/home/yunus/projects/vad_using_one_shot_learning/dataset/IPAD_dataset/R01/testing/features/06.npy"
-test_path = "/home/yunus/projects/vad_using_one_shot_learning/dataset/IPAD_dataset/R01/testing/features/09.npy"
+# sadece bu kısmı değiştirerek path ayarlayabilirsin (01, 06, 09)
+# sample_no hem test_path de hem de save_path de kullanılıyor
+sample_no = "09"    
+test_path = "/home/yunus/projects/vad_using_one_shot_learning/dataset/IPAD_dataset/R01/testing/features/"
+
+test_path = test_path + sample_no + ".npy"
+
 test_features = np.load(test_path)
 print(f"📂 Loaded test features: {test_features.shape}")
 
@@ -82,14 +86,12 @@ print(f"✅ Inference completed! {len(errors)} sequences processed.")
 # 6️⃣ Save and Visualize Results
 # ======================================================
 os.makedirs("results", exist_ok=True)
-# np.save("/home/yunus/projects/vad_using_one_shot_learning/data/results/anomaly_scores_R01.npy", errors)
-# print("💾 Saved anomaly scores to results/anomaly_scores_R01.npy")
 
-np.save("/home/yunus/projects/vad_using_one_shot_learning/data/results/anomaly_scores_R01_06.npy", errors)
-print("💾 Saved anomaly scores to results/anomaly_scores_R01_06.npy")
+save_path = "/home/yunus/projects/vad_using_one_shot_learning/data/results/anomaly_scores_R01_"
+save_path = save_path + sample_no + ".npy"
 
-np.save("/home/yunus/projects/vad_using_one_shot_learning/data/results/anomaly_scores_R01_09.npy", errors)
-print("💾 Saved anomaly scores to results/anomaly_scores_R01_09.npy")
+np.save(save_path, errors)
+print(f"💾 Saved anomaly scores to {save_path[48:]}")
 
 # Plot
 plt.figure(figsize=(12,5))

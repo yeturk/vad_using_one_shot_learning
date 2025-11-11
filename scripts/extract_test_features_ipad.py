@@ -43,20 +43,15 @@ preprocess = transforms.Compose([
 # ======================================================
 # 4. Define Directories (TEST PATHS)
 # ======================================================
-# the first test → R01/testing/frames/01 (color anomaly)
-# frames_dir  = "dataset/IPAD_dataset/R01/testing/frames/01"
-# output_path = "dataset/IPAD_dataset/R01/testing/features"
+sample_no = "09"
+frames_dir  = "dataset/IPAD_dataset/R01/testing/frames/" + sample_no
+output_path = "dataset/IPAD_dataset/R01/testing/features/" + sample_no + ".npy"
 
-# the second test → R01/testing/frames/06 (angle anomaly)
-frames_dir  = "dataset/IPAD_dataset/R01/testing/frames/06"
-output_path = "dataset/IPAD_dataset/R01/testing/features"
+print(f"frames_dir  = {frames_dir}")
+print(f"output_path = {output_path}")
 
-# the third test → R01/testing/frames/09 (normal sample)
-frames_dir  = "dataset/IPAD_dataset/R01/testing/frames/09"
-output_path = "dataset/IPAD_dataset/R01/testing/features"
-
-os.makedirs(output_path, exist_ok=True)
-
+# 🔧 FIX: Create the directory (not the file path)
+os.makedirs(os.path.dirname(output_path), exist_ok=True)
 print(f"📂 Reading test frames from: {frames_dir}")
 
 # ======================================================
@@ -80,10 +75,6 @@ print(f"✅ Test features extracted: {features.shape}")
 # ======================================================
 # 6. Save Output
 # ======================================================
-# output_file = os.path.join(output_path, "01.npy") # first
-# output_file = os.path.join(output_path, "06.npy") # second
-output_file = os.path.join(output_path, "09.npy")   # third
-np.save(output_file, features)
-print(f"💾 Saved test features to: {output_file}")
-
+np.save(output_path, features)
+print(f"💾 Saved test features to: {output_path}")
 print("\n 🎯 Test feature extraction completed successfully!")

@@ -43,7 +43,9 @@ preprocess = transforms.Compose([
 # ======================================================
 # 4. Define Directories
 # ======================================================
-frames_dir  = "/home/yunus/projects/vad_using_one_shot_learning/dataset/IPAD_dataset/R01/training/frames/01"
+sample_no = "01"
+frames_dir  = "/home/yunus/projects/vad_using_one_shot_learning/dataset/IPAD_dataset/R01/training/frames/"
+frames_dir = frames_dir + sample_no
 output_path = "/home/yunus/projects/vad_using_one_shot_learning/dataset/IPAD_dataset/R01/training/features"
 os.makedirs(output_path, exist_ok=True)
 
@@ -72,8 +74,8 @@ print(f"✅ Features extracted: {features.shape}")
 # ======================================================
 # 6. Save Output
 # ======================================================
-output_file = os.path.join(output_path, "01.npy")
+output_file = os.path.join(output_path, (sample_no + ".npy")) # output_path + "01.npy"
 np.save(output_file, features)
-print(f"💾 Saved features to: {output_file}")
+print(f"💾 Saved features to: {output_file[48:]}")
 
 print("\n 🎯 Feature extraction completed successfully!")
